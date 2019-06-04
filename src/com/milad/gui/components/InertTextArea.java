@@ -1,4 +1,4 @@
-package com.milad.gui;
+package com.milad.gui.components;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
+
+import com.milad.gui.MiladMainFrame;
 
 public class InertTextArea extends JEditorPane {
 	private static final long serialVersionUID = -1586542179899235222L;

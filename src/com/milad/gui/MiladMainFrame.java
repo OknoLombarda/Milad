@@ -1,34 +1,25 @@
 package com.milad.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import com.milad.MiladTools;
 import com.milad.Word;
+import com.milad.gui.components.InertTextArea;
 
 public class MiladMainFrame extends JFrame {
 	private static final long serialVersionUID = 3064265991964266671L;
@@ -45,13 +36,16 @@ public class MiladMainFrame extends JFrame {
 	private InertTextArea transcription;
 	private InertTextArea translation;
 	private InertTextArea usage;
+	private SettingsDialog settingsDialog;
+	private TrainingChooser trainingChooser;
 	
 	public MiladMainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);
-
+		setTitle("Milad");
+		
 		GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);
 		
@@ -69,8 +63,22 @@ public class MiladMainFrame extends JFrame {
 		exit.setPreferredSize(buttonSize);
 		
 		exit.addActionListener(event -> System.exit(0));
+		
+		JPanel aboutPanel = new JPanel();
+		
+		JLabel aboutLabel = new JLabel();
+		JLabel picLabel = new JLabel();
+		aboutLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		aboutLabel.setPreferredSize(new Dimension(250, 200));
+		aboutLabel.setText("<html><b>Made by:</b> OknoLombarda<br><b>e-mail:</b> viouor@gmail.com<br>"
+				+ "<br><b>Version:</b> " + MiladTools.getProperty("version") + "</html>"); // TODO replace with resources
+		picLabel.setIcon(new ImageIcon("ava.jpg")); // TODO replace with resources
+		
+		aboutPanel.add(aboutLabel, BorderLayout.WEST);
+		aboutPanel.add(picLabel, BorderLayout.EAST);
+		
 		about.addActionListener(event -> {
-			JOptionPane.showMessageDialog(this, "<html><h1>TEST</h1></html>", "About", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, aboutPanel, "About", JOptionPane.PLAIN_MESSAGE);
 		});
 
 		buttonPanel.add(practice, new GBC(0, 0).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
@@ -78,6 +86,28 @@ public class MiladMainFrame extends JFrame {
 		buttonPanel.add(settings, new GBC(0, 2).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
 		buttonPanel.add(about, new GBC(0, 3).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
 		buttonPanel.add(exit, new GBC(0, 4).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
+		
+		settings.addActionListener(event -> {
+			if (settingsDialog == null)
+				settingsDialog = new SettingsDialog(this);
+			settingsDialog.showDialog();
+		});
+		
+		vocabulary.addActionListener(event -> {
+			
+		});
+		
+		practice.addActionListener(event -> {
+			if (trainingChooser == null)
+				trainingChooser = new TrainingChooser(this);
+			
+			trainingChooser.showDialog();
+			if (trainingChooser.isChosen()) {
+				String choice = trainingChooser.getChoice();
+				System.out.println(choice);
+				setState(Frame.ICONIFIED);
+			}
+		});
 		
 		JPanel wordPanel = new JPanel();
 		wordPanel.setLayout(new GridBagLayout());
@@ -104,7 +134,7 @@ public class MiladMainFrame extends JFrame {
 		usage = new InertTextArea(this);
 		
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		randomWord.setFont(new Font("Georgia", Font.ITALIC + Font.BOLD, 30));
+		randomWord.setFont(new Font("Georgia", Font.ITALIC + Font.BOLD, 30)); // TODO move to separate panel
 		transcription.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
 		translation.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		usage.setFont(new Font("Times New Roman", Font.PLAIN, 18));

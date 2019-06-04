@@ -2,16 +2,22 @@ package com.milad;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MiladTools {
 	private static File data = new File("vocabulary.txt");
+	private static File properties = new File("milad.properties");
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
+	private static Properties prop = new Properties();
 	
 	public static void initializeFiles() {
 		/*private String path = new File(MiladTools.class.getProtectionDomain()
@@ -19,7 +25,8 @@ public class MiladTools {
 		path = path.replace("Milad.jar", ""); */
 	}
 	
-	public static void readData() throws FileNotFoundException {
+	public static void readData() throws IOException {
+		prop.load(new FileReader(properties));
 /*		Scanner sc = new Scanner(data);
 		while (sc.hasNextLine()) {
 			String[] param = sc.nextLine().split(";");
@@ -71,5 +78,13 @@ public class MiladTools {
 		Random rand = new Random();
 		List<Word> words = vocabulary.stream().filter(v -> v.getClass() == Word.class).collect(Collectors.toList());
 		return words.get(rand.nextInt(words.size()));
+	}
+	
+	public static String getProperty(String key) {
+		return prop.getProperty(key);
+	}
+	
+	public static void setProperty(String key, String value) {
+		prop.put(key, value);
 	}
 }
