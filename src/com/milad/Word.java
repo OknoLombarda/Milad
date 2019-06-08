@@ -130,4 +130,18 @@ public class Word implements Comparable<Word> {
 		                        .append(lastTimePracticed.getDayOfMonth());
 		return sb.toString();
 	}
+	
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		
+		if (other == null)
+			return false;
+		
+		if (this.getClass() != other.getClass())
+			return false;
+		
+		Word otherWord = (Word) other;
+		return word.equals(otherWord.getWord());
+	}
 }

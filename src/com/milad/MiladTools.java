@@ -6,18 +6,28 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MiladTools {
+	public static final int PRIMARY = 0;
+	public static final int FOREIGN = 1;
+	
 	private static File data = new File("vocabulary.txt");
-	private static File properties = new File("milad.properties");
+	private static File properties = new File("milad.properties"); // TODO replace with resources
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
 	private static Properties prop = new Properties();
+	private static Predicate<Word> word = w -> w.getClass() == Word.class;
+	private static Predicate<Word> phrase = p -> p.getClass() == Phrase.class;
 	
 	public static void initializeFiles() {
 		/*private String path = new File(MiladTools.class.getProtectionDomain()
@@ -74,9 +84,33 @@ public class MiladTools {
 		pw.close();
 	}
 	
+	public static List<Word> getWords(int amount) {
+		return vocabulary.stream().filter(word).sorted().limit(amount).collect(Collectors.toList());
+	}
+	
+	public static List<String> getRandomData(int flag, int amount) {
+		Collections.shuffle(vocabulary);
+		Stream<Word> str = vocabulary.stream().filter(word).limit(amount);
+		
+		if (flag == FOREIGN)
+			return str.map(w -> w.getWord()).collect(Collectors.toList());
+		
+		else if (flag == PRIMARY) {
+			List<String> list = new ArrayList<String>();
+			str.forEach(w -> {
+				for (String s : w.getTranslations())
+					if (list.size() < amount)
+						list.add(s);
+			});
+			return list;
+		}
+		
+		return new ArrayList<String>();
+	}
+	
 	public static Word getRandomWord() {
 		Random rand = new Random();
-		List<Word> words = vocabulary.stream().filter(v -> v.getClass() == Word.class).collect(Collectors.toList());
+		List<Word> words = vocabulary.stream().filter(word).collect(Collectors.toList());
 		return words.get(rand.nextInt(words.size()));
 	}
 	

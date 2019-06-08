@@ -1,0 +1,5 @@
+<html>
+	<b>Made by:</b> OknoLombarda<br><b>
+	e-mail:</b> viouor@gmail.com<br>
+	<br><b>Version:</b> 0.3
+</html>

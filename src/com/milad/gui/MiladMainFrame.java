@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.milad.MiladTools;
+import com.milad.ResourceLoader;
 import com.milad.Word;
 import com.milad.gui.components.InertTextArea;
 
@@ -38,6 +39,7 @@ public class MiladMainFrame extends JFrame {
 	private InertTextArea usage;
 	private SettingsDialog settingsDialog;
 	private TrainingChooser trainingChooser;
+	private Training training;
 	
 	public MiladMainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,9 +72,9 @@ public class MiladMainFrame extends JFrame {
 		JLabel picLabel = new JLabel();
 		aboutLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		aboutLabel.setPreferredSize(new Dimension(250, 200));
-		aboutLabel.setText("<html><b>Made by:</b> OknoLombarda<br><b>e-mail:</b> viouor@gmail.com<br>"
-				+ "<br><b>Version:</b> " + MiladTools.getProperty("version") + "</html>"); // TODO replace with resources
-		picLabel.setIcon(new ImageIcon("ava.jpg")); // TODO replace with resources
+		
+		aboutLabel.setText((String) ResourceLoader.getResource("about"));
+		picLabel.setIcon((ImageIcon) ResourceLoader.getResource("coolPic"));
 		
 		aboutPanel.add(aboutLabel, BorderLayout.WEST);
 		aboutPanel.add(picLabel, BorderLayout.EAST);
@@ -103,9 +105,16 @@ public class MiladMainFrame extends JFrame {
 			
 			trainingChooser.showDialog();
 			if (trainingChooser.isChosen()) {
-				String choice = trainingChooser.getChoice();
-				System.out.println(choice);
-				setState(Frame.ICONIFIED);
+				int choice = trainingChooser.getChoice();
+				
+				if (training == null)
+					training = new Training(this, choice);
+				else
+					training.setType(choice);
+				
+				setVisible(false);
+				training.showDialog();
+				setVisible(true);
 			}
 		});
 		
@@ -134,7 +143,7 @@ public class MiladMainFrame extends JFrame {
 		usage = new InertTextArea(this);
 		
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		randomWord.setFont(new Font("Georgia", Font.ITALIC + Font.BOLD, 30)); // TODO move to separate panel
+		randomWord.setFont(new Font("Georgia", Font.ITALIC + Font.BOLD, 30));
 		transcription.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
 		translation.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		usage.setFont(new Font("Times New Roman", Font.PLAIN, 18));

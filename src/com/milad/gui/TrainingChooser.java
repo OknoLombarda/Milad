@@ -11,13 +11,18 @@ public class TrainingChooser extends JDialog {
 	private static final long serialVersionUID = -958097680672382397L;
 	private static final int WIDTH = 250;
 	private static final int HEIGHT = 250;
+	public static final int WT = 1;
+	public static final int TW = 2;
+	public static final int WC = 3;
+	public static final int PC = 4;
+	public static final int WCA = 5;
 	
 	private JButton wordTranslation;
 	private JButton translationWord;
 	private JButton wordConstructor;
 	private JButton phraseConstructor;
 	private JButton wordCards;
-	private String choice;
+	private int choice;
 	private boolean isOk;
 	
 	public TrainingChooser(JFrame parent) {
@@ -30,11 +35,11 @@ public class TrainingChooser extends JDialog {
 		GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);
 		
-		wordTranslation = makeButton("Word — Translation");
-		translationWord = makeButton("Translation — Word");
-		wordConstructor = makeButton("Word Constructor");
-		phraseConstructor = makeButton("Phrase Constructor");
-		wordCards = makeButton("Word Cards");
+		wordTranslation = makeButton("Word — Translation", WT);
+		translationWord = makeButton("Translation — Word", TW);
+		wordConstructor = makeButton("Word Constructor", WC);
+		phraseConstructor = makeButton("Phrase Constructor", PC);
+		wordCards = makeButton("Word Cards", WCA);
 		
 		Dimension buttonSize = wordTranslation.getMinimumSize();
 		wordTranslation.setPreferredSize(buttonSize);
@@ -50,7 +55,7 @@ public class TrainingChooser extends JDialog {
 	}
 	
 	public void showDialog() {
-		choice = "";
+		choice = 0;
 		isOk = false;
 		setVisible(true);
 	}
@@ -59,14 +64,14 @@ public class TrainingChooser extends JDialog {
 		return isOk;
 	}
 	
-	public String getChoice() {
+	public int getChoice() {
 		return choice;
 	}
 	
-	private JButton makeButton(String name) {
+	private JButton makeButton(String name, int option) {
 		JButton button = new JButton(name);
 		button.addActionListener(event -> {
-			choice = button.getText();
+			choice = option;
 			isOk = true;
 			setVisible(false);
 		});
