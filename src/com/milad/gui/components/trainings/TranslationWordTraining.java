@@ -28,21 +28,18 @@ import com.milad.MiladTools;
 import com.milad.Word;
 import com.milad.gui.GBC;
 
-public class WordTranslationTraining extends JPanel {
+public class TranslationWordTraining extends JPanel {
 	private static final long serialVersionUID = 5784941329301774967L;
 	private static final int WIDTH = 650;
 	private static final int HEIGHT = 370;
 	private static final Dimension buttonSize = new Dimension(270, 40);
 	
 	private JLabel word;
-	private JLabel transcription;
 	private JButton[] options;
 	private JButton next;
 	
 	private ArrayList<Word> words;
 	private Iterator<Word> wordIter;
-	private ArrayList<String> wrongOptions;
-	private Iterator<String> optIter;
 	
 	private Random rand;
 	
@@ -55,24 +52,19 @@ public class WordTranslationTraining extends JPanel {
 	private String answer;
 	private int ansIndex;
 	
-	public WordTranslationTraining(JFrame parentFrame, JDialog ancestor) {
+	public TranslationWordTraining(JFrame parentFrame, JDialog ancestor) {
 		answer = "";
 		results = new ArrayList<>();
 		results.add("<html>");
-		words = new ArrayList<>(MiladTools.getWords(10));
+		words = new ArrayList<>(MiladTools.getWords(50));
 		Collections.shuffle(words);
-		wrongOptions = new ArrayList<>(MiladTools.getTranslations(40));
-		Collections.shuffle(wrongOptions);
 		rand = new Random();
 		setLayout(new GridBagLayout());
 		
 		JPanel leftPanel = new JPanel(new GridBagLayout());
 		word = new JLabel();
-		transcription = new JLabel();
 		word.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		transcription.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
-		leftPanel.add(word, new GBC(0, 0).setAnchor(GBC.SOUTH).setInsets(10, 10, 5, 10).setWeight(0, 0));
-		leftPanel.add(transcription, new GBC(0, 1).setAnchor(GBC.NORTH).setInsets(0, 10, 10, 10).setWeight(0, 0));
+		leftPanel.add(word, new GBC(0, 0).setAnchor(GBC.SOUTH).setInsets(10).setWeight(0, 0));
 		
 		rightPanel = new JPanel(new GridBagLayout());
 		options = new JButton[5];
@@ -123,17 +115,15 @@ public class WordTranslationTraining extends JPanel {
 	public void updatePanel() {
 		StringBuilder sb = new StringBuilder();
 		
-		if (wordIter == null) {
+		if (wordIter == null)
 			wordIter = words.iterator();
-			optIter = wrongOptions.iterator();
-		}
 		
 		currentWord = wordIter.next();
+		answer = currentWord.getWord();
 		ArrayList<String> transl = currentWord.getTranslations();
-		answer = transl.get(rand.nextInt(transl.size()));
+		String wordTranslation = transl.get(rand.nextInt(transl.size()));
 		
-		word.setText(currentWord.getWord());
-		transcription.setText(currentWord.hasTranscription() ? currentWord.getTranscription() : "<html><br></html>");
+		word.setText(wordTranslation);
 		
 		if (imap == null) {
 			imap = this.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
@@ -142,7 +132,7 @@ public class WordTranslationTraining extends JPanel {
 		
 		ansIndex = rand.nextInt(options.length);
 		for (int i = 0; i < options.length; i++) {
-			sb.append(i + 1).append(". ").append(i == ansIndex ? answer : optIter.next());
+			sb.append(i + 1).append(". ").append(i == ansIndex ? answer : wordIter.next().getWord());
 			OptionAction optAct = new OptionAction(sb.toString(), i);
 			options[i].setAction(optAct);
 			sb.delete(0, sb.length());
@@ -158,13 +148,10 @@ public class WordTranslationTraining extends JPanel {
 	public void repeat() {
 		results = new ArrayList<>();
 		results.add("<html>");
-		words = new ArrayList<>(MiladTools.getWords(10));
+		words = new ArrayList<>(MiladTools.getWords(50));
 		Collections.shuffle(words);
-		wrongOptions = new ArrayList<>(MiladTools.getTranslations(40));
-		Collections.shuffle(wrongOptions);
 		
 		wordIter = words.iterator();
-		optIter = wrongOptions.iterator();
 		
 		updatePanel();
 	}

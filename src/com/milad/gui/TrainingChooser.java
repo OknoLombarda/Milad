@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import com.milad.MiladTools;
+
 public class TrainingChooser extends JDialog {
 	private static final long serialVersionUID = -958097680672382397L;
 	private static final int WIDTH = 250;
@@ -57,6 +59,28 @@ public class TrainingChooser extends JDialog {
 	public void showDialog() {
 		choice = 0;
 		isOk = false;
+		
+		int vocabularySize = MiladTools.getVocabularySize();
+		if (vocabularySize < 10) {
+			String tip = "You must have at least 10 words in your vocabulary for this training";
+			wordConstructor.setEnabled(false);
+			wordCards.setEnabled(false);
+			wordConstructor.setToolTipText(tip);
+			wordCards.setToolTipText(tip);
+		}
+		else if (vocabularySize < 50) {
+			String tip = "You must have at least 50 words in your vocabulary for this training";
+			wordTranslation.setEnabled(false);
+			translationWord.setEnabled(false);
+			wordTranslation.setToolTipText(tip);
+			translationWord.setToolTipText(tip);
+		}
+		
+		if (MiladTools.getAmountOfPhrases() < 1) {
+			phraseConstructor.setEnabled(false);
+			phraseConstructor.setToolTipText("Yout must have at least 1 phrase in your vocabulary for this training");
+		}
+		
 		setVisible(true);
 	}
 	

@@ -19,9 +19,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MiladTools {
-	public static final int PRIMARY = 0;
-	public static final int FOREIGN = 1;
-	
 	private static File data = new File("vocabulary.txt");
 	private static File properties = new File("milad.properties"); // TODO replace with resources
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
@@ -84,28 +81,24 @@ public class MiladTools {
 		pw.close();
 	}
 	
+	public static void showWords() { // TODO del
+		for (Word w : vocabulary)
+			System.out.println(w);
+	}
+	
 	public static List<Word> getWords(int amount) {
 		return vocabulary.stream().filter(word).sorted().limit(amount).collect(Collectors.toList());
 	}
 	
-	public static List<String> getRandomData(int flag, int amount) {
-		Collections.shuffle(vocabulary);
-		Stream<Word> str = vocabulary.stream().filter(word).limit(amount);
-		
-		if (flag == FOREIGN)
-			return str.map(w -> w.getWord()).collect(Collectors.toList());
-		
-		else if (flag == PRIMARY) {
-			List<String> list = new ArrayList<String>();
-			str.forEach(w -> {
-				for (String s : w.getTranslations())
-					if (list.size() < amount)
-						list.add(s);
-			});
-			return list;
-		}
-		
-		return new ArrayList<String>();
+	public static List<String> getTranslations(int amount) {
+		Stream<Word> str = vocabulary.stream().filter(word).sorted().skip(10).limit(amount);
+		List<String> list = new ArrayList<String>();
+		str.forEach(w -> {
+			for (String s : w.getTranslations())
+				if (list.size() < amount)
+					list.add(s);
+		});
+		return list;
 	}
 	
 	public static Word getRandomWord() {
@@ -120,5 +113,13 @@ public class MiladTools {
 	
 	public static void setProperty(String key, String value) {
 		prop.put(key, value);
+	}
+	
+	public static int getVocabularySize() {
+		return vocabulary.size();
+	}
+	
+	public static int getAmountOfPhrases() {
+		return (int) vocabulary.stream().filter(phrase).count();
 	}
 }

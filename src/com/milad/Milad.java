@@ -7,6 +7,8 @@ import com.milad.gui.MiladMainFrame;
 
 public class Milad {
 	public static void main(String[] args) throws IOException {
+		// read files in separate thread
+		// make loading screen ?
 		MiladTools.readData();
 		ResourceLoader.loadResources();
 

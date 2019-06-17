@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -107,10 +106,10 @@ public class MiladMainFrame extends JFrame {
 			if (trainingChooser.isChosen()) {
 				int choice = trainingChooser.getChoice();
 				
-				if (training == null)
+		//		if (training == null)
 					training = new Training(this, choice);
-				else
-					training.setType(choice);
+		//		else
+		//			training.setType(choice);
 				
 				setVisible(false);
 				training.showDialog();

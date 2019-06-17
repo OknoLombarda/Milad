@@ -21,6 +21,7 @@ public class ResourceLoader {
 		
 		resources.put("about", sb.toString());
 		resources.put("coolPic", new ImageIcon(coolPic.getPath()));
+		sc.close();
 	}
 	
 	public static Object getResource(String name) {
