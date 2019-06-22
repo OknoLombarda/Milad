@@ -86,8 +86,13 @@ public class MiladTools {
 			System.out.println(w);
 	}
 	
+	public static List<Word> getWords(int amount, Predicate<Word> filter) {
+		return vocabulary.stream().filter(word).filter(filter == null ? w -> true : filter)
+					     .sorted().limit(amount).collect(Collectors.toList());
+	}
+	
 	public static List<Word> getWords(int amount) {
-		return vocabulary.stream().filter(word).sorted().limit(amount).collect(Collectors.toList());
+		return getWords(amount, null);
 	}
 	
 	public static List<String> getTranslations(int amount) {

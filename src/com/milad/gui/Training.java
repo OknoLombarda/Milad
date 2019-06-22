@@ -15,7 +15,7 @@ public class Training extends JDialog {
 
 	private JFrame parentFrame;
 	private int type;
-	
+
 	public Training(JFrame parent, int type) {
 		super(parent, true);
 		this.parentFrame = parent;
@@ -29,17 +29,19 @@ public class Training extends JDialog {
 			}
 		});
 	}
-	
+
 	public void showDialog() {
 		if (type == TrainingChooser.WT) {
 			setTitle("Word — Translation");
 			add(new WordTranslationTraining(parentFrame, this), BorderLayout.CENTER);
-		}
-		else if (type == TrainingChooser.TW) {
+		} else if (type == TrainingChooser.TW) {
 			setTitle("Translation — Word");
 			add(new TranslationWordTraining(parentFrame, this), BorderLayout.CENTER);
+		} else if (type == TrainingChooser.WC) {
+			setTitle("Word Constructor");
+			add(new WordConstructorTraining(parentFrame, this), BorderLayout.CENTER);
 		}
-		
+
 		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);

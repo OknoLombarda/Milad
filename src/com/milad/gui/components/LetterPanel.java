@@ -13,10 +13,12 @@ public class LetterPanel extends JPanel {
 	private static final int SIZE = 30;
 	
 	private JLabel letter;
+	private boolean empty;
 	
 	public LetterPanel() {
 		letter = new JLabel();
-		letter.setFont(new Font(Font.SERIF, Font.BOLD, 20));
+		letter.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		letter.setBorder(BorderFactory.createEmptyBorder( -3, 0, 0, 0 ));
 		add(letter);
 		setEmpty();
 	}
@@ -29,8 +31,8 @@ public class LetterPanel extends JPanel {
 	public void setLetter(String letter) {
 		setBackground(Color.GREEN);
 		setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		String text = letter.contains("<html>") ? letter : "<html><p color=\"darkgreen\">" + letter + "</p></html>";
-		this.letter.setText(text);
+		this.letter.setText(letter.contains("<html>") ? letter : "<html><p color=\"darkgreen\">" + letter + "</p></html>");
+		empty = false;
 	}
 	
 	public String getLetter() {
@@ -38,9 +40,36 @@ public class LetterPanel extends JPanel {
 	}
 	
 	public void setEmpty() {
-		setBackground(Color.GRAY);
+		setBackground(Color.LIGHT_GRAY);
 		setBorder(BorderFactory.createLoweredSoftBevelBorder());
-		letter.setText("");
+		letter.setText(" ");
+		empty = true;
+	}
+	
+	public boolean isEmpty() {
+		return empty;
+	}
+	
+	public boolean isIdenticalTo(Object other) {
+		if (this == other)
+			return true;
+		
+		if (other == null)
+			return false;
+		
+		if (getClass() != other.getClass())
+			return false;
+		
+		LetterPanel otherPanel = (LetterPanel) other;
+		
+		if (empty) {
+			if (otherPanel.isEmpty())
+				return true;
+			else
+				return false;
+		} else {
+			return getLetter().equals(otherPanel.getLetter());
+		}
 	}
 	
 	public Dimension preferredSize() {

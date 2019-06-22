@@ -60,26 +60,34 @@ public class TrainingChooser extends JDialog {
 		choice = 0;
 		isOk = false;
 		
+		boolean moreThanTen = true;
+		boolean moreThanFifty = true;
+		boolean atLeastOne = true;
 		int vocabularySize = MiladTools.getVocabularySize();
+		
 		if (vocabularySize < 10) {
+			moreThanTen = false;
 			String tip = "You must have at least 10 words in your vocabulary for this training";
-			wordConstructor.setEnabled(false);
-			wordCards.setEnabled(false);
 			wordConstructor.setToolTipText(tip);
 			wordCards.setToolTipText(tip);
 		}
 		else if (vocabularySize < 50) {
+			moreThanFifty = false;
 			String tip = "You must have at least 50 words in your vocabulary for this training";
-			wordTranslation.setEnabled(false);
-			translationWord.setEnabled(false);
 			wordTranslation.setToolTipText(tip);
 			translationWord.setToolTipText(tip);
 		}
 		
 		if (MiladTools.getAmountOfPhrases() < 1) {
-			phraseConstructor.setEnabled(false);
+			atLeastOne = false;
 			phraseConstructor.setToolTipText("Yout must have at least 1 phrase in your vocabulary for this training");
 		}
+		
+		wordConstructor.setEnabled(moreThanTen);
+		wordCards.setEnabled(moreThanTen);
+		wordTranslation.setEnabled(moreThanFifty);
+		translationWord.setEnabled(moreThanFifty);
+		phraseConstructor.setEnabled(atLeastOne);
 		
 		setVisible(true);
 	}
