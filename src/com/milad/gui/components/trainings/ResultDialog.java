@@ -25,6 +25,10 @@ public class ResultDialog extends JDialog {
 	
 	private ResultDialog(JDialog parent, String message) {
 		super(parent, "Results", true);
+		BorderLayout layout = new BorderLayout();
+		layout.setHgap(10);
+		layout.setVgap(10);
+		setLayout(layout);
 		option = OK_OPTION;
 		
 		JPanel labelPanel = new JPanel();

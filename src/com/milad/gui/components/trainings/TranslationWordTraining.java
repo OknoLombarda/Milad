@@ -54,10 +54,7 @@ public class TranslationWordTraining extends JPanel {
 	
 	public TranslationWordTraining(JFrame parentFrame, JDialog ancestor) {
 		answer = "";
-		results = new ArrayList<>();
-		results.add("<html>");
-		words = new ArrayList<>(MiladTools.getWords(50));
-		Collections.shuffle(words);
+		initialize(true);
 		rand = new Random();
 		setLayout(new GridBagLayout());
 		
@@ -98,7 +95,7 @@ public class TranslationWordTraining extends JPanel {
 					parentFrame.setState(Frame.NORMAL);
 				}
 				else if (input == ResultDialog.REPEAT_OPTION) {
-					repeat();
+					initialize(false);
 				}
 			}
 		});
@@ -114,9 +111,6 @@ public class TranslationWordTraining extends JPanel {
 	
 	public void updatePanel() {
 		StringBuilder sb = new StringBuilder();
-		
-		if (wordIter == null)
-			wordIter = words.iterator();
 		
 		currentWord = wordIter.next();
 		answer = currentWord.getWord();
@@ -145,7 +139,7 @@ public class TranslationWordTraining extends JPanel {
 		}
 	}
 	
-	public void repeat() {
+	public void initialize(boolean firstTime) {
 		results = new ArrayList<>();
 		results.add("<html>");
 		words = new ArrayList<>(MiladTools.getWords(50));
@@ -153,7 +147,9 @@ public class TranslationWordTraining extends JPanel {
 		
 		wordIter = words.iterator();
 		
-		updatePanel();
+		if (!firstTime) {
+			updatePanel();
+		}
 	}
 	
 	public Dimension preferredSize() {

@@ -73,7 +73,7 @@ public class MiladMainFrame extends JFrame {
 		aboutLabel.setPreferredSize(new Dimension(250, 200));
 		
 		aboutLabel.setText((String) ResourceLoader.getResource("about"));
-		picLabel.setIcon((ImageIcon) ResourceLoader.getResource("coolPic"));
+		picLabel.setIcon((ImageIcon) ResourceLoader.getResource("ava"));
 		
 		aboutPanel.add(aboutLabel, BorderLayout.WEST);
 		aboutPanel.add(picLabel, BorderLayout.EAST);
@@ -105,12 +105,7 @@ public class MiladMainFrame extends JFrame {
 			trainingChooser.showDialog();
 			if (trainingChooser.isChosen()) {
 				int choice = trainingChooser.getChoice();
-				
-		//		if (training == null)
-					training = new Training(this, choice);
-		//		else
-		//			training.setType(choice);
-				
+				training = new Training(this, choice);			
 				setVisible(false);
 				training.showDialog();
 				setVisible(true);

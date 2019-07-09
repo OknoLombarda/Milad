@@ -2,6 +2,7 @@ package com.milad.gui.components.trainings;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -37,7 +38,7 @@ public class WordConstructorTraining extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 550;
 	private static final int HEIGHT = 500;
-	private static final Predicate<Word> filter = w -> w.getWord().length() <= 15;
+	private static final Predicate<Word> filter = w -> w.getWord().length() <= 15 && !w.getWord().contains(".");
 
 	private JLabel word;
 	private JLabel transcription;
@@ -65,11 +66,7 @@ public class WordConstructorTraining extends JPanel {
 		this.parentFrame = parentFrame;
 		this.ancestor = ancestor;
 		setLayout(new GridBagLayout());
-		results = new ArrayList<>();
-		results.add("<html>");
-		words = new ArrayList<>(MiladTools.getWords(10, filter));
-		wordIter = words.iterator();
-		Collections.shuffle(words);
+		initialize(true);
 		answer = new LinkedList<>();
 		letters = new LinkedList<>();
 		nextLetterIndex = 0;
@@ -152,13 +149,16 @@ public class WordConstructorTraining extends JPanel {
 		}
 	}
 
-	public void repeat() {
+	public void initialize(boolean firstTime) {
 		results = new ArrayList<>();
 		results.add("<html>");
 		words = new ArrayList<>(MiladTools.getWords(10, filter));
 		Collections.shuffle(words);
 		wordIter = words.iterator();
-		updatePanel();
+		
+		if (!firstTime) {
+			updatePanel();
+		}
 	}
 
 	public Dimension preferredSize() {
@@ -238,6 +238,14 @@ public class WordConstructorTraining extends JPanel {
 				mistakeCounter++;
 			}
 		}
+		
+		public void mouseEntered(MouseEvent event) {
+			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+		
+		public void mouseExited(MouseEvent event) {
+			setCursor(Cursor.getDefaultCursor());
+		}
 	}
 
 	public void blink(LetterPanel lp) {
@@ -273,7 +281,7 @@ public class WordConstructorTraining extends JPanel {
 				ancestor.dispose();
 				parentFrame.setState(Frame.NORMAL);
 			} else if (input == ResultDialog.REPEAT_OPTION) {
-				repeat();
+				initialize(false);
 			}
 		}
 	}

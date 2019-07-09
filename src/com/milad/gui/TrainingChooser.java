@@ -13,11 +13,11 @@ public class TrainingChooser extends JDialog {
 	private static final long serialVersionUID = -958097680672382397L;
 	private static final int WIDTH = 250;
 	private static final int HEIGHT = 250;
-	public static final int WT = 1;
-	public static final int TW = 2;
-	public static final int WC = 3;
-	public static final int PC = 4;
-	public static final int WCA = 5;
+	public static final int WT = 0;
+	public static final int TW = 1;
+	public static final int WC = 2;
+	public static final int PC = 3;
+	public static final int WCA = 4;
 	
 	private JButton wordTranslation;
 	private JButton translationWord;

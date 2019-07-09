@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MiladTools {
+	private static final Predicate<Word> WORD = w -> w.getClass() == Word.class;
+	private static final Predicate<Word> PHRASE = p -> p.getClass() == Phrase.class;
+	
 	private static File data = new File("vocabulary.txt");
 	private static File properties = new File("milad.properties"); // TODO replace with resources
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
 	private static Properties prop = new Properties();
-	private static Predicate<Word> word = w -> w.getClass() == Word.class;
-	private static Predicate<Word> phrase = p -> p.getClass() == Phrase.class;
 	
 	public static void initializeFiles() {
 		/*private String path = new File(MiladTools.class.getProtectionDomain()
@@ -87,7 +88,7 @@ public class MiladTools {
 	}
 	
 	public static List<Word> getWords(int amount, Predicate<Word> filter) {
-		return vocabulary.stream().filter(word).filter(filter == null ? w -> true : filter)
+		return vocabulary.stream().filter(WORD).filter(filter == null ? w -> true : filter)
 					     .sorted().limit(amount).collect(Collectors.toList());
 	}
 	
@@ -95,8 +96,12 @@ public class MiladTools {
 		return getWords(amount, null);
 	}
 	
+	public static List<Phrase> getPhrases(int amount) {
+		return vocabulary.stream().filter(PHRASE).sorted().limit(amount).map(p -> (Phrase) p).collect(Collectors.toList());
+	}
+	
 	public static List<String> getTranslations(int amount) {
-		Stream<Word> str = vocabulary.stream().filter(word).sorted().skip(10).limit(amount);
+		Stream<Word> str = vocabulary.stream().filter(WORD).sorted().skip(10).limit(amount);
 		List<String> list = new ArrayList<String>();
 		str.forEach(w -> {
 			for (String s : w.getTranslations())
@@ -108,7 +113,7 @@ public class MiladTools {
 	
 	public static Word getRandomWord() {
 		Random rand = new Random();
-		List<Word> words = vocabulary.stream().filter(word).collect(Collectors.toList());
+		List<Word> words = vocabulary.stream().filter(WORD).collect(Collectors.toList());
 		return words.get(rand.nextInt(words.size()));
 	}
 	
@@ -125,6 +130,6 @@ public class MiladTools {
 	}
 	
 	public static int getAmountOfPhrases() {
-		return (int) vocabulary.stream().filter(phrase).count();
+		return (int) vocabulary.stream().filter(PHRASE).count();
 	}
 }
