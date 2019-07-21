@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class MiladTools {
 	
 	private static File data = new File("vocabulary.txt");
 	private static File properties = new File("milad.properties"); // TODO replace with resources
-	private static ArrayList<Word> vocabulary = new ArrayList<>();
+	private static ArrayList<Word> vocabulary = new ArrayList<>(); // TODO ensure capacity (print arr size)
 	private static Properties prop = new Properties();
 	
 	public static void initializeFiles() {
@@ -112,9 +111,9 @@ public class MiladTools {
 	}
 	
 	public static Word getRandomWord() {
-		Random rand = new Random();
 		List<Word> words = vocabulary.stream().filter(WORD).collect(Collectors.toList());
-		return words.get(rand.nextInt(words.size()));
+		Collections.shuffle(words);
+		return words.size() > 0 ? words.get(0) : Word.empty();
 	}
 	
 	public static String getProperty(String key) {

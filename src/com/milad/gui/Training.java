@@ -43,6 +43,9 @@ public class Training extends JDialog {
 		} else if (type == TrainingChooser.PC) {
 			setTitle("Phrase Constructor");
 			add(new PhraseConstructorTraining(parentFrame, this), BorderLayout.CENTER);
+		} else if (type == TrainingChooser.WCA) {
+			setTitle("Word Cards");
+			add(new WordCardsTraining(parentFrame, this), BorderLayout.CENTER);
 		}
 
 		pack();

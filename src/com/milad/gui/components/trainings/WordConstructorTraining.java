@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javax.swing.AbstractAction;
@@ -34,7 +34,7 @@ import com.milad.Word;
 import com.milad.gui.GBC;
 import com.milad.gui.components.LetterPanel;
 
-public class WordConstructorTraining extends JPanel {
+public class WordConstructorTraining extends AbstractTraining {
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 550;
 	private static final int HEIGHT = 500;
@@ -49,8 +49,7 @@ public class WordConstructorTraining extends JPanel {
 	private LinkedList<LetterPanel> letters;
 	private Iterator<LetterPanel> ansIter;
 
-	private ArrayList<String> results;
-	private ArrayList<Word> words;
+	private List<Word> words;
 	private Iterator<Word> wordIter;
 
 	private Word currentWord;
@@ -59,14 +58,10 @@ public class WordConstructorTraining extends JPanel {
 	private int mistakeCounter;
 
 	private Object lock;
-	private JFrame parentFrame;
-	private JDialog ancestor;
 
 	public WordConstructorTraining(JFrame parentFrame, JDialog ancestor) {
-		this.parentFrame = parentFrame;
-		this.ancestor = ancestor;
+		super(parentFrame, ancestor);
 		setLayout(new GridBagLayout());
-		initialize(true);
 		answer = new LinkedList<>();
 		letters = new LinkedList<>();
 		nextLetterIndex = 0;
@@ -99,13 +94,14 @@ public class WordConstructorTraining extends JPanel {
 		updatePanel();
 	}
 
+	@Override
 	public void updatePanel() {
 		currentWord = wordIter.next();
 		nextLetterIndex = 0;
 		isCorrect = true;
 		mistakeCounter = 0;
 
-		ArrayList<String> translations = currentWord.getTranslations();
+		List<String> translations = currentWord.getTranslations();
 		word.setText(translations.get((int) Math.random() * translations.size()));
 		transcription.setText(currentWord.hasTranscription() ? currentWord.getTranscription() : "<html><br></html>");
 
@@ -149,10 +145,15 @@ public class WordConstructorTraining extends JPanel {
 		}
 	}
 
+	@Override
 	public void initialize(boolean firstTime) {
-		results = new ArrayList<>();
-		results.add("<html>");
-		words = new ArrayList<>(MiladTools.getWords(10, filter));
+		if (firstTime) {
+			results = new ArrayList<>();
+			results.add("<html>");
+		} else {
+			results.removeIf(r -> !r.equals("<html>"));
+		}
+		words = MiladTools.getWords(10, filter);
 		Collections.shuffle(words);
 		wordIter = words.iterator();
 		
@@ -271,18 +272,7 @@ public class WordConstructorTraining extends JPanel {
 
 		if (wordIter.hasNext())
 			updatePanel();
-		else {
-			StringBuilder sb = new StringBuilder();
-			for (String s : results)
-				sb.append(s);
-			sb.append("</html>");
-			int input = ResultDialog.showDialog(ancestor, sb.toString());
-			if (input == ResultDialog.OK_OPTION) {
-				ancestor.dispose();
-				parentFrame.setState(Frame.NORMAL);
-			} else if (input == ResultDialog.REPEAT_OPTION) {
-				initialize(false);
-			}
-		}
+		else
+			showResultDialog();
 	}
 }

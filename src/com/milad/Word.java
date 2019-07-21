@@ -144,4 +144,8 @@ public class Word implements Comparable<Word> {
 		Word otherWord = (Word) other;
 		return word.equals(otherWord.getWord());
 	}
+	
+	public static Word empty() {
+		return new Word("<br>", new String[] { "<br>" });
+	}
 }

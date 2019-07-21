@@ -12,13 +12,23 @@ import com.milad.gui.MiladMainFrame;
 public class InertTextArea extends JEditorPane {
 	private static final long serialVersionUID = -1586542179899235222L;
 
-	public InertTextArea(MiladMainFrame frame) {
+	public InertTextArea() {
 		setHighlighter(null);
 		setEditable(false);
 		setBackground(UIManager.getColor("Label.background"));
 		setBorder(null);
 		setContentType("text/html");
+		setFocusable(false);
 		putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+	}
+	
+	public InertTextArea(String text) {
+		this();
+		setText(text);
+	}
+	
+	public InertTextArea(MiladMainFrame frame) {
+		this("<html><br></html>");
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
 				frame.updateRandomWord();
@@ -28,12 +38,5 @@ public class InertTextArea extends JEditorPane {
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 		});
-	}
-	
-	public void setText(String text, String color, boolean changeColor) {
-		if (changeColor)
-			setText("<html><center><span style=\"color:" + color + "\">" + text + "</span></center></html>");
-		else
-			setText("<html><center>" + text + "</center></html>");
 	}
 }

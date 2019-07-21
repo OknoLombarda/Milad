@@ -130,7 +130,7 @@ public class MiladMainFrame extends JFrame {
 		});
 		
 		title = new InertTextArea(this);
-		title.setText("Random word", "gray", true);
+		title.setText("<center><p color=\"gray\">Random word</p><center>");
 		randomWord = new InertTextArea(this);
 		transcription = new InertTextArea(this);
 		translation = new InertTextArea(this);
@@ -157,12 +157,12 @@ public class MiladMainFrame extends JFrame {
 	public void updateRandomWord() {
 		Word word = MiladTools.getRandomWord();
 
-		randomWord.setText(word.getWord(), "", false);
+		randomWord.setText("<center>".concat(word.getWord()).concat("</center>"));
 		
 		if (word.hasTranscription())
-			transcription.setText(word.getTranscription(), "", false);
+			transcription.setText("<center>".concat(word.getTranscription()).concat("</center>"));
 		else
-			transcription.setText("<br>", "", false);
+			transcription.setText("<br>");
 		
 		StringBuilder sb = new StringBuilder();
 		Iterator<String> iter = word.getTranslations().iterator();
@@ -171,11 +171,11 @@ public class MiladMainFrame extends JFrame {
 			if (iter.hasNext())
 				sb.append(", ");
 		}
-		translation.setText(sb.toString(), "", false);
+		translation.setText("<center>".concat(sb.toString()).concat("</center>"));
 		
 		if (word.hasUsage())
-			usage.setText(word.getUsage(), "", false);
+			usage.setText("<center>".concat(word.getUsage()).concat("</center>"));
 		else
-			usage.setText("<br>", "", false);
+			usage.setText("<br>");
 	}
 }
