@@ -1,10 +1,16 @@
 package com.milad;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,9 +27,9 @@ public class MiladTools {
 	private static final Predicate<Word> WORD = w -> w.getClass() == Word.class;
 	private static final Predicate<Word> PHRASE = p -> p.getClass() == Phrase.class;
 	
-	private static File data = new File("vocabulary.txt");
-	private static File properties = new File("milad.properties"); // TODO replace with resources
-	private static ArrayList<Word> vocabulary = new ArrayList<>(); // TODO ensure capacity (print arr size)
+	private static File data = new File("vocabulary.dat");
+	private static File properties = new File("milad.properties");
+	private static ArrayList<Word> vocabulary = new ArrayList<>();
 	private static Properties prop = new Properties();
 	
 	public static void initializeFiles() {
@@ -32,53 +38,17 @@ public class MiladTools {
 		path = path.replace("Milad.jar", ""); */
 	}
 	
-	public static void readData() throws IOException {
-		prop.load(new FileReader(properties));
-/*		Scanner sc = new Scanner(data);
-		while (sc.hasNextLine()) {
-			String[] param = sc.nextLine().split(";");
-			if (param[0].equals("word")) {
-				int[] date = Arrays.stream(param[6].split("\\.")).mapToInt(s -> Integer.parseInt(s)).toArray();
-				Word temp = new Word(param[1], date[0], date[1], date[2], param[2].split("&"));
-				temp.setTranscription(param[3]);
-				temp.setUsage(param[4]);
-				temp.setStrength(Integer.parseInt(param[5]));
-				vocabulary.add(temp);
-			}
-			else if (param[0].equals("phrase")) {
-				int[] date = Arrays.stream(param[4].split("\\.")).mapToInt(s -> Integer.parseInt(s)).toArray();
-				Phrase temp = new Phrase(param[1], date[0], date[1], date[2], param[2].split("&"));
-				temp.setStrength(Integer.parseInt(param[3]));
-				vocabulary.add(temp);
-			}
-		}
-		sc.close(); */
-		Scanner sc = new Scanner(data);
-		while (sc.hasNextLine()) {
-			String[] param = sc.nextLine().split(";");
-			if (param[0].equals("word")) {
-				Word temp = new Word(param[1], param[2].split("&"));
-				if (param[3].isBlank())
-					param[3] = "#";
-				temp.setTranscription(param[3]);
-				if (param[4].isBlank())
-					param[4] = "#";
-				temp.setUsage(param[4]);
-				vocabulary.add(temp);
-			}
-			else if (param[0].equals("phrase")) {
-				Phrase temp = new Phrase(param[1], param[2].split("&"));
-				vocabulary.add(temp);
-			}
-		}
-		sc.close();
+	public static void printData() throws FileNotFoundException, IOException {
+		ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("test.data")));
+		os.writeObject(vocabulary);
+		os.close();
 	}
 	
-	public static void printData() throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(data);
-		for (Word w : vocabulary)
-			pw.println(w);
-		pw.close();
+	@SuppressWarnings("unchecked")
+	public static void readData() throws FileNotFoundException, IOException, ClassNotFoundException {
+		ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(new FileInputStream(data)));
+		vocabulary = (ArrayList<Word>) is.readObject();
+		is.close();
 	}
 	
 	public static void showWords() { // TODO del
@@ -130,5 +100,62 @@ public class MiladTools {
 	
 	public static int getAmountOfPhrases() {
 		return (int) vocabulary.stream().filter(PHRASE).count();
+	}
+	
+	public static List<Word> find(String s) {
+		boolean checkTranslations = true;
+		if (s.matches("[A-Za-z ,.!?-]+"))
+			checkTranslations = false;
+		
+		return find(s, checkTranslations);
+	}
+	
+	private static List<Word> find(String s, boolean flag) {
+		List<SearchResult<Word>> results = new ArrayList<SearchResult<Word>>();
+		double index;
+		
+		for (Word w : vocabulary) {
+			index = checkSimilarity(w.getWord(), s);
+			
+			if (flag) {
+				for (String t : w.getTranslations()) {
+					double t_index = checkSimilarity(t, s);
+					if (t_index > index) {
+						index = t_index;
+					}
+				}
+			}
+			
+			if (index != 0.0)
+				results.add(new SearchResult<Word>(w, index));
+		}
+		
+		return results.stream().sorted().map(r -> r.getResult()).collect(Collectors.toList());
+	}
+	
+	private static double checkSimilarity(String first, String second) {
+		first = first.toLowerCase();
+		second = second.toLowerCase();
+		if (first.equals(second))
+			return Double.MAX_VALUE;
+		
+		String s1 = second;
+		String s2 = second;
+		boolean done = false;
+		
+		while (!done && s1.length() != 0 && s2.length() != 0) {
+			if (first.contains(s1)) {
+				done = true;
+			} else if (first.contains(s2)) {
+				s1 = s2;
+				done = true;
+			}
+			s1 = s1.substring(0, s1.length() - 1);
+			s2 = s2.substring(1);
+		}
+		
+		double scale = (double) s1.length() / second.length();
+		int diff = Math.abs(second.length() - first.length());
+		return (scale < 0.3 ? 0 : scale) * (diff == 0 ? 1 : (1.0 / diff));
 	}
 }

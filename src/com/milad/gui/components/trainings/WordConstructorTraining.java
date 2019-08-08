@@ -249,7 +249,7 @@ public class WordConstructorTraining extends AbstractTraining {
 		}
 	}
 
-	public void blink(LetterPanel lp) {
+	private void blink(LetterPanel lp) {
 		synchronized (lock) {
 			Color bg = lp.getBackground();
 			lp.setBackground(Color.RED);
@@ -263,7 +263,7 @@ public class WordConstructorTraining extends AbstractTraining {
 		}
 	}
 
-	public void addResult() {
+	private void addResult() {
 		if (isCorrect && nextLetterIndex == answer.size()) {
 			results.add("<p color=\"green\">" + currentWord.getWord() + "</p>");
 			currentWord.updatePracticed();

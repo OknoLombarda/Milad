@@ -1,11 +1,14 @@
 package com.milad;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class Word implements Comparable<Word> {
+public class Word implements Comparable<Word>, Serializable {
+	private static final long serialVersionUID = -2109823654436567281L;
+	
 	private String word;
 	private ArrayList<String> translations;
 	private LocalDate lastTimePracticed;

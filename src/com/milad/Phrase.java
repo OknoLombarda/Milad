@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Phrase extends Word {
+	private static final long serialVersionUID = 3809466908862357868L;
+	
 	private String phrase;
 	
 	public Phrase(String phrase, String[] translations) {

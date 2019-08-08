@@ -72,6 +72,7 @@ public class WordCardsTraining extends AbstractTraining {
 				currentWord.updatePracticed();
 			} else {
 				color = "red";
+				currentWord.setStrength(currentWord.getStrength() / 2);
 			}
 
 			results.add("<p color=\"".concat(color).concat("\">").concat(currentWord.getWord()).concat("</p>"));

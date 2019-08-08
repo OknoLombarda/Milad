@@ -13,7 +13,6 @@ public class WordPanel extends JPanel {
 	
 	private JLabel word;
 	private Dimension size;
-	private boolean drag;
 	private boolean used;
 	
 	public WordPanel() {
@@ -23,21 +22,12 @@ public class WordPanel extends JPanel {
 		this.word.setFont(new Font(Font.SERIF, Font.BOLD, 16));
 		size = new Dimension(1, 1);
 		add(this.word);
-		drag = false;
 		used = false;
 	}
 	
 	public WordPanel(String word) {
 		this();
 		setText(word);
-	}
-	
-	public boolean isDragged() {
-		return drag;
-	}
-	
-	public void setDragged(boolean drag) {
-		this.drag = drag;
 	}
 	
 	public boolean isUsed() {

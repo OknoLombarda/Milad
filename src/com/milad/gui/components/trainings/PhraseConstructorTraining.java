@@ -155,12 +155,12 @@ public class PhraseConstructorTraining extends AbstractTraining {
 		repaint();
 	}
 
-	public void placeWords() {
+	private void placeWords() {
 		placeWordPanels(words, WORDS_LINE);
 		placeWordPanels(answer, ANSWER_LINE);
 	}
 
-	public void checkAnswer() {
+	private void checkAnswer() {
 		StringBuilder sb = new StringBuilder();
 		for (WordPanel wp : answer) {
 			sb.append(wp.getText()).append(" ");
@@ -169,11 +169,11 @@ public class PhraseConstructorTraining extends AbstractTraining {
 		isCorrect = ans.equals(currentPhrase.getPhrase().trim());
 	}
 
-	public void showCheckResult() {
+	private void showCheckResult() {
 		phrasePanel.setBorder(BorderFactory.createLineBorder(isCorrect ? Color.GREEN : Color.RED, 4, true));
 	}
 
-	public void placeWordPanels(List<WordPanel> list, int y) {
+	private void placeWordPanels(List<WordPanel> list, int y) {
 		int length = 5;
 		for (WordPanel wp : list) {
 			length += wp.getPreferredSize().width + 5;
