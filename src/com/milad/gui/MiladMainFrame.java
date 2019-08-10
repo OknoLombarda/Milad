@@ -129,12 +129,12 @@ public class MiladMainFrame extends JFrame {
 			}
 		});
 		
-		title = new InertTextArea(this);
+		title = makeLabel();
 		title.setText("<center><p color=\"gray\">Random word</p><center>");
-		randomWord = new InertTextArea(this);
-		transcription = new InertTextArea(this);
-		translation = new InertTextArea(this);
-		usage = new InertTextArea(this);
+		randomWord = makeLabel();
+		transcription = makeLabel();
+		translation = makeLabel();
+		usage = makeLabel();
 		
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		randomWord.setFont(new Font("Georgia", Font.ITALIC + Font.BOLD, 30));
@@ -154,7 +154,7 @@ public class MiladMainFrame extends JFrame {
 		add(buttonPanel, new GBC(1, 0, 1, 2).setAnchor(GBC.EAST).setInsets(10, 0, 10, 15).setWeight(0, 0));
 	}
 	
-	public void updateRandomWord() {
+	private void updateRandomWord() {
 		Word word = MiladTools.getRandomWord();
 
 		randomWord.setText("<center>".concat(word.getWord()).concat("</center>"));
@@ -177,5 +177,19 @@ public class MiladMainFrame extends JFrame {
 			usage.setText("<center>".concat(word.getUsage()).concat("</center>"));
 		else
 			usage.setText("<br>");
+	}
+	
+	private InertTextArea makeLabel() {
+		InertTextArea label = new InertTextArea("<br>");
+		label.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				updateRandomWord();
+			}
+			
+			public void mouseEntered(MouseEvent event) {
+				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+		});
+		return label;
 	}
 }

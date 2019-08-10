@@ -102,6 +102,10 @@ public class MiladTools {
 		return (int) vocabulary.stream().filter(PHRASE).count();
 	}
 	
+	public static void remove(Word word) {
+		vocabulary.remove(word);
+	}
+	
 	public static List<Word> find(String s) {
 		boolean checkTranslations = true;
 		if (s.matches("[A-Za-z ,.!?-]+"))

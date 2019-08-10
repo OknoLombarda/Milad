@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.milad.MiladTools;
+import com.milad.Phrase;
 import com.milad.Word;
 
 public class MiladTest {

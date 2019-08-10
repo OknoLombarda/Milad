@@ -26,17 +26,4 @@ public class InertTextArea extends JEditorPane {
 		this();
 		setText(text);
 	}
-	
-	public InertTextArea(MiladMainFrame frame) {
-		this("<html><br></html>");
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent event) {
-				frame.updateRandomWord();
-			}
-			
-			public void mouseEntered(MouseEvent event) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			}
-		});
-	}
 }

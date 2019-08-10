@@ -10,15 +10,15 @@ import javax.swing.JFrame;
 import com.milad.MiladTools;
 
 public class VocabularyFrame extends JDialog {
-	private static final int WIDTH = 600;
-	private static final int HEIGHT = 400;
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 600;
 	
 	public VocabularyFrame(JFrame parent) {
 		super(parent, "Vocabulary", true);
 		setSize(WIDTH, HEIGHT);
 	}
 	
-	// TODO delete all following
+/*	// TODO delete all following
 	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		MiladTools.readData();
 		EventQueue.invokeLater(() -> {
@@ -26,5 +26,5 @@ public class VocabularyFrame extends JDialog {
 			vf.setLocationRelativeTo(null);
 			vf.setVisible(true);
 		});
-	}
+	} */
 }

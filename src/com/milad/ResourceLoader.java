@@ -39,7 +39,7 @@ public class ResourceLoader {
 		return resources.get(name);
 	}
 	
-	public static String removeExtension(String s) {
+	private static String removeExtension(String s) {
 		return s.replaceAll("\\..+", "");
 	}
 }
