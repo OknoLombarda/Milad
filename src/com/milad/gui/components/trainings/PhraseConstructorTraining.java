@@ -63,7 +63,7 @@ public class PhraseConstructorTraining extends AbstractTraining {
 		translation.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 
 		line = new JLabel();
-		line.setIcon((ImageIcon) ResourceLoader.getResource("line"));
+		line.setIcon((ImageIcon) ResourceLoader.getProperty("line"));
 
 		phrasePanel = new JPanel(null);
 		phrasePanel.setOpaque(false);

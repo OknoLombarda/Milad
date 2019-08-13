@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +24,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.swing.JFileChooser;
+
 public class MiladTools {
 	private static final Predicate<Word> WORD = w -> w.getClass() == Word.class;
 	private static final Predicate<Word> PHRASE = p -> p.getClass() == Phrase.class;
@@ -32,10 +35,12 @@ public class MiladTools {
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
 	private static Properties prop = new Properties();
 	
-	public static void initializeFiles() {
-		/*private String path = new File(MiladTools.class.getProtectionDomain()
+	public static void initializeFiles() throws URISyntaxException {
+	/*	String path = new File(MiladTools.class.getProtectionDomain()
 		   .getCodeSource().getLocation().toURI()).getPath();
-		path = path.replace("Milad.jar", ""); */
+		path = path.replace("Milad.jar", "");
+		data = new File(path + "vocabulary.dat"); */
+		data = new File(System.getProperty("user.dir") + "/vocabulary.dat");
 	}
 	
 	public static void printData() throws FileNotFoundException, IOException {

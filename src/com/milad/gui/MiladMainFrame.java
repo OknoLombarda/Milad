@@ -72,8 +72,8 @@ public class MiladMainFrame extends JFrame {
 		aboutLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		aboutLabel.setPreferredSize(new Dimension(250, 200));
 		
-		aboutLabel.setText((String) ResourceLoader.getResource("about"));
-		picLabel.setIcon((ImageIcon) ResourceLoader.getResource("ava"));
+		aboutLabel.setText((String) ResourceLoader.getProperty("about"));
+		picLabel.setIcon((ImageIcon) ResourceLoader.getProperty("ava"));
 		
 		aboutPanel.add(aboutLabel, BorderLayout.WEST);
 		aboutPanel.add(picLabel, BorderLayout.EAST);
