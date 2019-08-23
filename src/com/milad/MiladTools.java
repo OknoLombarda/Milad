@@ -61,6 +61,10 @@ public class MiladTools {
 			System.out.println(w);
 	}
 	
+	public static List<Word> getVocabulary() {
+		return vocabulary;
+	}
+	
 	public static List<Word> getWords(int amount, Predicate<Word> filter) {
 		return vocabulary.stream().filter(WORD).filter(filter == null ? w -> true : filter)
 					     .sorted().limit(amount).collect(Collectors.toList());

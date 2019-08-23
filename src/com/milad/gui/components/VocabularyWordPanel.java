@@ -1,6 +1,7 @@
 package com.milad.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.util.List;
@@ -26,9 +27,8 @@ public class VocabularyWordPanel extends JPanel {
 	private JButton remove;
 
 	private Word word;
-
-	public VocabularyWordPanel(Word word) {
-		this.word = word;
+	
+	public VocabularyWordPanel() {
 		setBorder(BorderFactory.createEtchedBorder());
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
@@ -79,8 +79,11 @@ public class VocabularyWordPanel extends JPanel {
 			setBackground(color);
 			repaint();
 		});
+	}
 
-		updatePanel();
+	public VocabularyWordPanel(Word word) {
+		this();
+		setWord(word);
 	}
 
 	public void setWord(Word word) {
