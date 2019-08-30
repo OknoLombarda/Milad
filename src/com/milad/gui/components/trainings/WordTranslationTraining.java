@@ -165,7 +165,7 @@ public class WordTranslationTraining extends AbstractTraining {
 	}
 	
 	private class OptionAction extends AbstractAction {
-		private static final long serialVersionUID = -4747004989771399786L;
+		private static final long serialVersionUID = 1L;
 
 		public OptionAction(String name, int index) {
 			putValue(Action.NAME, name);
@@ -175,7 +175,7 @@ public class WordTranslationTraining extends AbstractTraining {
 		public void actionPerformed(ActionEvent event) {
 			int index = (int) getValue("index");
 			boolean isCorrect = index == ansIndex;
-			results.add("<p color=\"" + (isCorrect ? "green" : "red") + "\">" + word.getText() + " — "
+			results.add("<p color=\"" + (isCorrect ? "green" : "red") + "\">" + currentWord.getWord() + " — "
 						+ ((String) getValue(Action.NAME)).substring(3) + "</p>");
 			
 			for (int i = 0; i < options.length; i++)

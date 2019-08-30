@@ -1,14 +1,17 @@
 package com.milad.gui.components.trainings;
 
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.milad.MiladTools;
+
 public abstract class AbstractTraining extends JPanel {
-	private static final long serialVersionUID = -3371833241885383061L;
+	private static final long serialVersionUID = 1L;
 	
 	protected List<String> results;
 	private JFrame parentFrame;
@@ -35,6 +38,12 @@ public abstract class AbstractTraining extends JPanel {
 		}
 		else if (input == ResultDialog.REPEAT_OPTION) {
 			initialize(false);
+		}
+		
+		try {
+			MiladTools.printData();
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO do smth about it
 		}
 	}
 	

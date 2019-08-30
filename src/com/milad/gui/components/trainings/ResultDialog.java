@@ -14,7 +14,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class ResultDialog extends JDialog {
-	private static final long serialVersionUID = -6034090959930493054L;
+	private static final long serialVersionUID = 1L;
 	public static final int OK_OPTION = 0;
 	public static final int REPEAT_OPTION = 1;
 	

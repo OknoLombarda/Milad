@@ -1,11 +1,14 @@
 package com.milad.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -23,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import com.milad.MiladTools;
+import com.milad.Phrase;
 import com.milad.ResourceLoader;
 import com.milad.Word;
 import com.milad.gui.components.AutoscrollSafePanel;
@@ -34,9 +38,13 @@ public class VocabularyFrame extends JDialog {
 
 	private JTextField searchBar;
 	private AutoscrollSafePanel resultPanel;
-	private ArrayDeque<VocabularyWordPanel> results;
+	private ArrayList<VocabularyWordPanel> results;
+	private WordEditor wordEditor;
+	private PhraseEditor phraseEditor;
 
 	private List<Word> content;
+	
+	private int pos = 0;
 
 	public VocabularyFrame(JFrame parent) {
 		super(parent, "Vocabulary", true);
@@ -44,8 +52,11 @@ public class VocabularyFrame extends JDialog {
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		setLayout(new GridBagLayout());
+		
+		wordEditor = new WordEditor(this);
+		phraseEditor = new PhraseEditor(this);
 
-		results = new ArrayDeque<>(MiladTools.getVocabularySize() / 2);
+		results = new ArrayList<>(MiladTools.getVocabularySize() / 2);
 		content = MiladTools.getVocabulary();
 
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -56,7 +67,7 @@ public class VocabularyFrame extends JDialog {
 		resultPanel = new AutoscrollSafePanel();
 		resultPanel.setBorder(BorderFactory.createEtchedBorder());
 		resultPanel.setBackground(Color.WHITE);
-		resultPanel.setLayout(new GridLayout(0, 1));
+		resultPanel.setLayout(new GridBagLayout());
 		resultPanel.setPreventAutoscroll(true);
 		JScrollPane scrollPane = new JScrollPane(resultPanel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -66,7 +77,6 @@ public class VocabularyFrame extends JDialog {
 		add(buttonPanel, new GBC(0, 0).setAnchor(GBC.NORTHWEST).setWeight(100, 0));
 		add(searchBar, new GBC(0, 1).setInsets(10).setAnchor(GBC.NORTHWEST).setWeight(100, 100));
 		add(scrollPane, new GBC(0, 2).setInsets(10).setFill(GBC.BOTH).setAnchor(GBC.NORTHWEST).setWeight(100, 100));
-
 		updateResults();
 	}
 
@@ -75,18 +85,38 @@ public class VocabularyFrame extends JDialog {
 		setVisible(true);
 	}
 
-	private void updateResults() {
-		while (results.size() < 30) {
+	public void updateResults() {
+		while (results.size() < content.size()) {
 			VocabularyWordPanel panel = new VocabularyWordPanel();
+			panel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent event) {
+					if (event.getClickCount() == 2) {
+						Word w = panel.getWord();
+						if (w.getClass() == Word.class) {
+							wordEditor.showEditor(w);
+						} else {
+							phraseEditor.showEditor((Phrase) w);
+						}
+					}
+				}
+			});
 			results.add(panel);
-			resultPanel.add(panel);
+			resultPanel.add(panel, new GBC(0, pos).setAnchor(GBC.NORTH).setFill(GBC.HORIZONTAL).setWeight(100, 100));
+			pos++;
 		}
-		while (results.size() > content.size()) {
-			resultPanel.remove(results.removeLast());
+		
+		while (pos > content.size()) { // TODO remake
+			pos--;
+			results.get(pos).setVisible(false);
 		}
-
-		Iterator<Word> iter = content.iterator();
+		
+		while (pos < content.size()) {
+			results.get(pos).setVisible(true);
+			pos++;
+		}
+		
 		Word w;
+		Iterator<Word> iter = content.iterator();
 		for (VocabularyWordPanel p : results) {
 			w = iter.next();
 			if (p.getWord() == null || !p.getWord().equals(w)) {

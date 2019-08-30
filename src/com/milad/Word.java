@@ -23,8 +23,8 @@ public class Word implements Comparable<Word>, Serializable {
 		this.translations.addAll(Arrays.asList(translations));
 		lastTimePracticed = LocalDate.now();
 		strength = 0;
-		usage = "#";
-		transcription = "#";
+		usage = "";
+		transcription = "";
 	}
 
 	public Word(String word, int year, int month, int day, String[] translations) {
@@ -107,11 +107,11 @@ public class Word implements Comparable<Word>, Serializable {
 	}
 	
 	public boolean hasTranscription() {
-		return !transcription.equals("#");
+		return transcription.length() != 0;
 	}
 	
 	public boolean hasUsage() {
-		return !usage.equals("#");
+		return usage.length() != 0;
 	}
 
 	public String toString() {

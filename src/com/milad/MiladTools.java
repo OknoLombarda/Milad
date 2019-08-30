@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -44,7 +45,7 @@ public class MiladTools {
 	}
 	
 	public static void printData() throws FileNotFoundException, IOException {
-		ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("test.data")));
+		ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(data)));
 		os.writeObject(vocabulary);
 		os.close();
 	}

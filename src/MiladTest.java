@@ -10,11 +10,9 @@ import com.milad.Word;
 public class MiladTest {
 	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		MiladTools.readData();
-		String s = "";
-		Scanner in = new Scanner(System.in);
-	//	s = in.nextLine();
-		List<Word> results = MiladTools.find(s);
-		results.forEach(System.out::println);
-		in.close();
+		List<Word> v = MiladTools.find("funnel");
+		for (int i = 0; i < v.size(); i++) {
+			System.out.println("(" + i + ")" + v.get(i));
+		}
 	}
 }

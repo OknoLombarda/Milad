@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import com.milad.gui.components.trainings.*;
 
 public class Training extends JDialog {
-	private static final long serialVersionUID = -2087016999805920494L;
+	private static final long serialVersionUID = 1L;
 
 	private JFrame parentFrame;
 	private int type;
@@ -21,9 +21,10 @@ public class Training extends JDialog {
 		this.parentFrame = parent;
 		this.type = type;
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		JDialog d = this;
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {
-				int input = JOptionPane.showConfirmDialog(null, "Are you sure?", "Training", JOptionPane.YES_NO_OPTION);
+				int input = JOptionPane.showConfirmDialog(d, "Are you sure?", "Training", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION)
 					setVisible(false);
 			}
