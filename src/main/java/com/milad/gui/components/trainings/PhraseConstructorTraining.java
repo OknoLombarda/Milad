@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,7 +64,11 @@ public class PhraseConstructorTraining extends AbstractTraining {
 		translation.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 
 		line = new JLabel();
-		line.setIcon((ImageIcon) ResourceLoader.getProperty("line"));
+		try {
+			line.setIcon((ImageIcon) ResourceLoader.getProperty("line"));
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO handle
+		}
 
 		phrasePanel = new JPanel(null);
 		phrasePanel.setOpaque(false);

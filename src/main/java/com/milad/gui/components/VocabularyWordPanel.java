@@ -37,6 +37,16 @@ public class VocabularyWordPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
 
+		ImageIcon hat = null;
+		ImageIcon bin = null;
+
+		try {
+			hat = (ImageIcon) ResourceLoader.getProperty("hat");
+			bin = (ImageIcon) ResourceLoader.getProperty("bin");
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO handle
+		}
+
 		selection = new JCheckBox();
 
 		wordLabel = new InertTextArea();
@@ -47,7 +57,7 @@ public class VocabularyWordPanel extends JPanel {
 		translations.setOpaque(false);
 		selection = new JCheckBox();
 
-		toLearning = new JButton((ImageIcon) ResourceLoader.getProperty("hat"));
+		toLearning = new JButton(hat);
 		toLearning.setFocusPainted(false);
 		toLearning.setBackground(Color.WHITE);
 		toLearning.setToolTipText("Send this word to learning");
@@ -62,7 +72,7 @@ public class VocabularyWordPanel extends JPanel {
 			}
 		});
 
-		remove = new JButton((ImageIcon) ResourceLoader.getProperty("bin"));
+		remove = new JButton(bin);
 		remove.setFocusPainted(false);
 		remove.setBackground(Color.WHITE);
 		remove.setToolTipText("Remove this word from vocabulary");
