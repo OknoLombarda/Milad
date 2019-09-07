@@ -1,19 +1,13 @@
 package com.milad.gui;
 
-import java.awt.Cursor;
-import java.awt.GridBagLayout;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import com.milad.MiladTools;
 import com.milad.Word;
@@ -24,10 +18,13 @@ public class WordEditor extends JDialog {
 	private static final int DEFAULT_HEIGHT = 220;
 	private static final int ADVANCED_WIDTH = 280;
 	private static final int ADVANCED_HEIGHT = 330;
-	
-	public static final int DEFAULT_STATE = 0;
-	public static final int ADVANCED_STATE = 1;
-	
+	private static final int DEFAULT_STATE = 0;
+	private static final int ADVANCED_STATE = 1;
+	private static final int EDIT_STATE = 2;
+	private static final int ADD_STATE = 4;
+	private static final String EDIT_TITLE = "Edit";
+	private static final String ADD_TITLE = "Add";
+
 	private JLabel wordLabel;
 	private JTextField wordField;
 	private JLabel translLabel;
@@ -36,16 +33,33 @@ public class WordEditor extends JDialog {
 	private JTextField transcrField;
 	private JLabel usageLabel;
 	private JTextField usageField;
-	private JLabel stateSwitcher;
+	private JButton stateSwitcher;
 	private JButton save;
 	private JButton cancel;
 	
 	private Word word;
+
+	private ActionListener editListener = event -> {
+		word.setWord(wordField.getText());
+		word.setTranslations(translField.getText().split("&"));
+		word.setTranscription(transcrField.getText());
+		word.setUsage(usageField.getText());
+		write();
+	};
+
+	private ActionListener addListener = event -> {
+		word = new Word(wordField.getText(), translField.getText().split("&"));
+		word.setTranscription(transcrField.getText());
+		word.setUsage(usageField.getText());
+		MiladTools.add(word);
+		((VocabularyFrame) getParent()).updateResults(MiladTools.getVocabulary());
+		write();
+	};
 	
-	private int state = DEFAULT_STATE;
+	private int state = DEFAULT_STATE + EDIT_STATE;
 	
 	public WordEditor(JDialog parent) {
-		super(parent, "Edit", true);
+		super(parent, EDIT_TITLE, true);
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
@@ -67,18 +81,7 @@ public class WordEditor extends JDialog {
 		usageField.setVisible(false);
 		
 		save = new JButton("Save");
-		save.addActionListener(event -> {
-			word.setWord(wordField.getText());
-			word.setTranslations(translField.getText().split("&"));
-			word.setTranscription(transcrField.getText());
-			word.setUsage(usageField.getText());
-			try {
-				MiladTools.printData();		// TODO print in a separate thread (?)
-			} catch (IOException e) {
-				e.printStackTrace(); // TODO print it somewhere else idk
-			}
-			setVisible(false);
-		});
+		save.addActionListener(editListener);
 		cancel = new JButton("Cancel");
 		cancel.addActionListener(event -> {
 			setVisible(false);
@@ -89,7 +92,7 @@ public class WordEditor extends JDialog {
 		buttonPanel.add(save, new GBC(0, 0).setAnchor(GBC.EAST).setInsets(10).setWeight(100, 100));
 		buttonPanel.add(cancel, new GBC(1, 0).setAnchor(GBC.EAST).setInsets(10, 5, 10, 10).setWeight(0, 100));
 		
-		stateSwitcher = new JLabel("<html><u><font color=\"#0645AD\">Advanced</font></u></html>");
+		stateSwitcher = new JButton("<html><u><font color=\"#0645AD\">Advanced</font></u></html>");
 		stateSwitcher.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent event) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -98,12 +101,11 @@ public class WordEditor extends JDialog {
 			public void mouseExited(MouseEvent event) {
 				setCursor(Cursor.getDefaultCursor());
 			}
-			
-			public void mouseClicked(MouseEvent event) {
-				setState(state == DEFAULT_STATE ? ADVANCED_STATE : DEFAULT_STATE);
-			}
 		});
-		
+		stateSwitcher.addActionListener(event -> setState((state & 1) == DEFAULT_STATE ? ADVANCED_STATE : DEFAULT_STATE));
+		stateSwitcher.setBackground(UIManager.getColor("Label.background"));
+		stateSwitcher.setBorder(null);
+
 		add(wordLabel, new GBC(0, 0).setAnchor(GBC.NORTHWEST).setInsets(5, 5, 0, 0).setWeight(100, 0));
 		add(wordField, new GBC(0, 1).setAnchor(GBC.NORTHWEST).setInsets(5, 5, 0, 0).setWeight(100, 0));
 		add(translLabel, new GBC(0, 2).setAnchor(GBC.NORTHWEST).setInsets(15, 5, 0, 0).setWeight(100, 0));
@@ -118,9 +120,9 @@ public class WordEditor extends JDialog {
 	
 	public void showEditor(Word word) {
 		this.word = word;
-		
+
 		wordField.setText(word.getWord());
-		
+
 		List<String> transl = word.getTranslations();
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < transl.size(); i++) {
@@ -130,30 +132,58 @@ public class WordEditor extends JDialog {
 			}
 		}
 		translField.setText(sb.toString());
-		
+
 		if (word.hasTranscription()) {
 			transcrField.setText(word.getTranscription());
 		}
-		
+
 		if (word.hasUsage()) {
 			usageField.setText(word.getUsage());
 		}
-		
+
+		if (state > (ADVANCED_STATE + EDIT_STATE)) {
+			state = state - ADD_STATE + EDIT_STATE;
+			setTitle(EDIT_TITLE);
+			save.removeActionListener(addListener);
+			save.addActionListener(editListener);
+		}
+		if ((state & 1) == ADVANCED_STATE) {
+			setState(DEFAULT_STATE);
+		}
+
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	public void showEditor() {
+		this.word = null;
+
+		wordField.setText("");
+		translField.setText("");
+		transcrField.setText("");
+		usageField.setText("");
+
+		if (state <= ADVANCED_STATE + EDIT_STATE) {
+			state = state - EDIT_STATE + ADD_STATE;
+			setTitle(ADD_TITLE);
+			save.removeActionListener(editListener);
+			save.addActionListener(addListener);
+		}
+		if ((state & 1) == ADVANCED_STATE) {
+			setState(DEFAULT_STATE);
+		}
+
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
-	public Word getContent() {
-		return word;
-	}
-	
-	public void setState(int state) {
+	private void setState(int state) {
 		if (state != DEFAULT_STATE && state != ADVANCED_STATE) {
 			throw new IllegalArgumentException("Illegal state value");
 		}
-		
-		this.state = state;
+
 		boolean flag = state == ADVANCED_STATE;
+		this.state += flag ? 1 : -1;
 		int width = flag ? ADVANCED_WIDTH : DEFAULT_WIDTH;
 		int height = flag ? ADVANCED_HEIGHT : DEFAULT_HEIGHT;
 		String s1 = "Simplified";
@@ -170,5 +200,16 @@ public class WordEditor extends JDialog {
 		transcrField.setVisible(flag);
 		usageLabel.setVisible(flag);
 		usageField.setVisible(flag);
+
+		repaint();
+	}
+
+	private void write() {
+		try {
+			MiladTools.printData();		// TODO print in a separate thread (?)
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();	// TODO print it somewhere else idk
+		}
 	}
 }

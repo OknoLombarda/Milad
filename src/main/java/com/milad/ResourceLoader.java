@@ -17,6 +17,7 @@ public class ResourceLoader {
 		resources.put("hat", "/hat.png");
 		resources.put("about", "/about.txt");
 		resources.put("line", "/line.png");
+		resources.put("icon", "/icon.png");
 	}
 
 	public static Object getProperty(String key) throws IOException {

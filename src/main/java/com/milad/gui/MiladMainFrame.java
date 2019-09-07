@@ -47,6 +47,11 @@ public class MiladMainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Milad");
+		try {
+			setIconImage(((ImageIcon) ResourceLoader.getProperty("icon")).getImage());
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO do something
+		}
 
 		GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);

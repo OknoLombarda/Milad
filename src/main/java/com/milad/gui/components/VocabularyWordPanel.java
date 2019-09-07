@@ -19,6 +19,7 @@ import com.milad.MiladTools;
 import com.milad.ResourceLoader;
 import com.milad.Word;
 import com.milad.gui.GBC;
+import com.milad.gui.VocabularyFrame;
 
 public class VocabularyWordPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +33,7 @@ public class VocabularyWordPanel extends JPanel {
 
 	private Word word;
 
-	public VocabularyWordPanel() {
+	public VocabularyWordPanel(VocabularyFrame vocabulary) {
 		setBorder(BorderFactory.createEtchedBorder());
 		setLayout(new GridBagLayout());
 		setBackground(Color.WHITE);
@@ -88,6 +89,7 @@ public class VocabularyWordPanel extends JPanel {
 				JPanel parent = (JPanel) getParent();
 				parent.remove(this);
 				parent.revalidate();
+				vocabulary.pos--;
 			}
 		});
 
@@ -113,8 +115,8 @@ public class VocabularyWordPanel extends JPanel {
 		});
 	}
 
-	public VocabularyWordPanel(Word word) {
-		this();
+	public VocabularyWordPanel(VocabularyFrame vocabulary, Word word) {
+		this(vocabulary);
 		setWord(word);
 	}
 
@@ -154,5 +156,9 @@ public class VocabularyWordPanel extends JPanel {
 		}
 		wordLabel.setText("<font color=\"#009900\">".concat(w.concat("</font>")));
 		strength.setValue(word.getStrength());
+	}
+
+	public JCheckBox getCheckBox() {
+		return selection;
 	}
 }

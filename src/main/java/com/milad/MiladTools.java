@@ -61,6 +61,10 @@ public class MiladTools {
 		for (Word w : vocabulary)
 			System.out.println(w);
 	}
+
+	public static void add(Word word) {
+		vocabulary.add(word);
+	}
 	
 	public static List<Word> getVocabulary() {
 		return vocabulary;
