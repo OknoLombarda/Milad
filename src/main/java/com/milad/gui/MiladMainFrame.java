@@ -1,10 +1,6 @@
 package com.milad.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -29,7 +25,6 @@ public class MiladMainFrame extends JFrame {
 
 	private JButton practice;
 	private JButton vocabulary;
-	private JButton settings;
 	private JButton about;
 	private JButton exit;
 	private InertTextArea title;
@@ -37,9 +32,9 @@ public class MiladMainFrame extends JFrame {
 	private InertTextArea transcription;
 	private InertTextArea translation;
 	private InertTextArea usage;
-	private SettingsDialog settingsDialog;
 	private TrainingChooser trainingChooser;
 	private Training training;
+	private VocabularyFrame vocabularyFrame;
 
 	public MiladMainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,13 +54,11 @@ public class MiladMainFrame extends JFrame {
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		practice = new JButton("Practice");
 		vocabulary = new JButton("Vocabulary");
-		settings = new JButton("Settings");
 		about = new JButton("About");
 		exit = new JButton("Exit");
 
 		Dimension buttonSize = vocabulary.getPreferredSize();
 		practice.setPreferredSize(buttonSize);
-		settings.setPreferredSize(buttonSize);
 		about.setPreferredSize(buttonSize);
 		exit.setPreferredSize(buttonSize);
 
@@ -94,18 +87,16 @@ public class MiladMainFrame extends JFrame {
 
 		buttonPanel.add(practice, new GBC(0, 0).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
 		buttonPanel.add(vocabulary, new GBC(0, 1).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
-		buttonPanel.add(settings, new GBC(0, 2).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
-		buttonPanel.add(about, new GBC(0, 3).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
-		buttonPanel.add(exit, new GBC(0, 4).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
+		buttonPanel.add(about, new GBC(0, 2).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
+		buttonPanel.add(exit, new GBC(0, 3).setAnchor(GBC.CENTER).setInsets(5).setWeight(0, 0));
 
-		settings.addActionListener(event -> {
-			if (settingsDialog == null)
-				settingsDialog = new SettingsDialog(this);
-			settingsDialog.showDialog();
-		});
-
+		vocabulary.setEnabled(false);
+		new Thread(() -> {
+			vocabularyFrame = new VocabularyFrame(this);
+			vocabulary.setEnabled(true);
+		}).start();
 		vocabulary.addActionListener(event -> {
-
+			vocabularyFrame.showFrame();
 		});
 
 		practice.addActionListener(event -> {

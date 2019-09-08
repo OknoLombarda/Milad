@@ -41,7 +41,7 @@ public abstract class AbstractTraining extends JPanel {
 		}
 		
 		try {
-			MiladTools.printData();
+			MiladTools.writeData();
 		} catch (IOException e) {
 			e.printStackTrace(); // TODO do smth about it
 		}

@@ -44,7 +44,7 @@ public class MiladTools {
 		data = new File(System.getProperty("user.dir") + "/vocabulary.dat");
 	}
 	
-	public static void printData() throws FileNotFoundException, IOException {
+	public static void writeData() throws FileNotFoundException, IOException {
 		ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(data)));
 		os.writeObject(vocabulary);
 		os.close();

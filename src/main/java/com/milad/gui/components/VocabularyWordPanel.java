@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class VocabularyWordPanel extends JPanel {
 			strength.setValue(0);
 			toLearning.setEnabled(false);
 			try {
-				MiladTools.printData();
+				MiladTools.writeData();
 			} catch (IOException e) {
 				e.printStackTrace(); // TODO ???
 			}
@@ -82,7 +83,7 @@ public class VocabularyWordPanel extends JPanel {
 			if (input == JOptionPane.YES_OPTION) {
 				MiladTools.remove(word);
 				try {
-					MiladTools.printData();
+					MiladTools.writeData();
 				} catch (IOException e) {
 					e.printStackTrace(); // TODO ???
 				}
@@ -109,15 +110,19 @@ public class VocabularyWordPanel extends JPanel {
 
 		selection.setOpaque(false);
 		selection.addActionListener(event -> {
-			Color color = selection.isSelected() ? new Color(153, 255, 102) : Color.WHITE;
-			setBackground(color);
-			repaint();
+			switchBackground();
 		});
 	}
 
 	public VocabularyWordPanel(VocabularyFrame vocabulary, Word word) {
 		this(vocabulary);
 		setWord(word);
+	}
+
+	public void switchBackground() {
+		Color color = selection.isSelected() ? new Color(153, 255, 102) : Color.WHITE;
+		setBackground(color);
+		repaint();
 	}
 
 	public void setWord(Word word) {
@@ -131,13 +136,14 @@ public class VocabularyWordPanel extends JPanel {
 
 	public void setSelected(boolean selected) {
 		selection.setSelected(selected);
+		switchBackground();
 	}
 
 	public boolean isSelected() {
 		return selection.isSelected();
 	}
 
-	private void updatePanel() {
+	public void updatePanel() {
 		toLearning.setEnabled(word.getStrength() != 0);
 
 		StringBuilder sb = new StringBuilder();
@@ -160,5 +166,11 @@ public class VocabularyWordPanel extends JPanel {
 
 	public JCheckBox getCheckBox() {
 		return selection;
+	}
+
+	public void addListeners() {
+		MouseListener ml = getMouseListeners()[0];
+		wordLabel.addMouseListener(ml);
+		translations.addMouseListener(ml);
 	}
 }

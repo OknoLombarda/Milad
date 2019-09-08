@@ -125,7 +125,7 @@ public class PhraseEditor extends JDialog {
 
 	private void write() {
 		try {
-			MiladTools.printData();		// TODO print in a separate thread (?)
+			MiladTools.writeData();		// TODO print in a separate thread (?)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	// TODO print it somewhere else idk
