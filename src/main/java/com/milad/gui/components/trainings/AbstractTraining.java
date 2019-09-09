@@ -40,11 +40,7 @@ public abstract class AbstractTraining extends JPanel {
 			initialize(false);
 		}
 		
-		try {
-			MiladTools.writeData();
-		} catch (IOException e) {
-			e.printStackTrace(); // TODO do smth about it
-		}
+		write();
 	}
 	
 	public void completeTraining() {
@@ -55,4 +51,14 @@ public abstract class AbstractTraining extends JPanel {
 	public abstract void initialize(boolean firstTime);
 	
 	public abstract void updatePanel();
+
+	private void write() {
+		new Thread(() -> {
+			try {
+				MiladTools.writeData();
+			} catch (IOException e) {
+				System.err.println("Error appeared while writing data. (VocabularyFrame)\n".concat(e.getMessage()));
+			}
+		}).start();
+	}
 }

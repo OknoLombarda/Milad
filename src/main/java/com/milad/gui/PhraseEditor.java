@@ -124,11 +124,12 @@ public class PhraseEditor extends JDialog {
 	}
 
 	private void write() {
-		try {
-			MiladTools.writeData();		// TODO print in a separate thread (?)
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();	// TODO print it somewhere else idk
-		}
+		new Thread(() -> {
+			try {
+				MiladTools.writeData();
+			} catch (IOException e) {
+				System.err.println("Error appeared while writing data. (PhraseEditor)\n".concat(e.getMessage()));
+			}
+		}).start();
 	}
 }

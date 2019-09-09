@@ -2,6 +2,7 @@ package com.milad;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -15,7 +16,6 @@ public class Word implements Comparable<Word>, Serializable {
 	private int strength;
 	private String usage;
 	private String transcription;
-	// image (?)
 
 	public Word(String word, String[] translations) {
 		this.translations = new ArrayList<>();
@@ -40,16 +40,9 @@ public class Word implements Comparable<Word>, Serializable {
 	
 	public void updateStrength() {
 		LocalDate present = LocalDate.now();
-		if (present.getYear() - lastTimePracticed.getYear() > 0) {
-			if (present.getYear() - lastTimePracticed.getYear() > 1)
-				strength = 0;
-			if (lastTimePracticed.getMonthValue() - present.getMonthValue() <= 0)
-				strength = 0;
-			else
-				strength -= (365 - lastTimePracticed.getDayOfYear() + present.getDayOfYear()) / 7;
-		}
-		else
-			strength -= (present.getDayOfYear() - lastTimePracticed.getDayOfYear()) / 7;
+		long weeks = lastTimePracticed.until(present, ChronoUnit.WEEKS);
+		strength -= weeks;
+
 		if (strength < 0)
 			strength = 0;
 	}

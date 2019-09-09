@@ -67,7 +67,8 @@ public class PhraseConstructorTraining extends AbstractTraining {
 		try {
 			line.setIcon((ImageIcon) ResourceLoader.getProperty("line"));
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO handle
+			System.err.println("Error occurred while reading image. (PhraseConstructorTraining/line.png)\n"
+					.concat(e.getMessage()));
 		}
 
 		phrasePanel = new JPanel(null);

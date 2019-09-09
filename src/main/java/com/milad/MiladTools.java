@@ -4,62 +4,43 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.swing.JFileChooser;
 
 public class MiladTools {
 	private static final Predicate<Word> WORD = w -> w.getClass() == Word.class;
 	private static final Predicate<Word> PHRASE = p -> p.getClass() == Phrase.class;
 	
 	private static File data = new File("vocabulary.dat");
-	private static File properties = new File("milad.properties");
 	private static ArrayList<Word> vocabulary = new ArrayList<>();
-	private static Properties prop = new Properties();
 	
-	public static void initializeFiles() throws URISyntaxException {
-	/*	String path = new File(MiladTools.class.getProtectionDomain()
-		   .getCodeSource().getLocation().toURI()).getPath();
-		path = path.replace("Milad.jar", "");
-		data = new File(path + "vocabulary.dat"); */
-		data = new File(System.getProperty("user.dir") + "/vocabulary.dat");
-	}
-	
-	public static void writeData() throws FileNotFoundException, IOException {
+	public static void writeData() throws IOException {
+		if (!data.exists()) {
+			data.createNewFile();
+		}
 		ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(data)));
 		os.writeObject(vocabulary);
 		os.close();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static void readData() throws FileNotFoundException, IOException, ClassNotFoundException {
-		ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(new FileInputStream(data)));
-		vocabulary = (ArrayList<Word>) is.readObject();
-		is.close();
-	}
-	
-	public static void showWords() { // TODO del
-		for (Word w : vocabulary)
-			System.out.println(w);
+	public static void readData() throws IOException, ClassNotFoundException {
+		if (!data.exists()) {
+			data.createNewFile();
+		} else {
+			ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(new FileInputStream(data)));
+			vocabulary = (ArrayList<Word>) is.readObject();
+			is.close();
+			vocabulary.forEach(w -> w.updateStrength());
+		}
 	}
 
 	public static void add(Word word) {
@@ -96,16 +77,7 @@ public class MiladTools {
 	
 	public static Word getRandomWord() {
 		List<Word> words = vocabulary.stream().filter(WORD).collect(Collectors.toList());
-		Collections.shuffle(words);
-		return words.size() > 0 ? words.get(0) : Word.empty();
-	}
-	
-	public static String getProperty(String key) {
-		return prop.getProperty(key);
-	}
-	
-	public static void setProperty(String key, String value) {
-		prop.put(key, value);
+		return words.size() > 0 ? words.get(ThreadLocalRandom.current().nextInt(words.size())) : Word.empty();
 	}
 	
 	public static int getVocabularySize() {
@@ -160,7 +132,7 @@ public class MiladTools {
 		String s1 = second;
 		String s2 = second;
 		boolean done = false;
-		
+
 		while (!done && s1.length() != 0 && s2.length() != 0) {
 			if (first.contains(s1)) {
 				done = true;

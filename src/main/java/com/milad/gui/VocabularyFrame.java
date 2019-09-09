@@ -77,11 +77,7 @@ public class VocabularyFrame extends JDialog {
 						resultPanel.remove(p);
 					}
 				}
-				try {
-					MiladTools.writeData();
-				} catch (IOException e) {
-					e.printStackTrace(); // TODO do smth
-				}
+				write();
 				resultPanel.repaint();
 			}
 		});
@@ -94,11 +90,7 @@ public class VocabularyFrame extends JDialog {
 						p.updatePanel();
 					}
 				}
-				try {
-					MiladTools.writeData();
-				} catch (IOException e) {
-					e.printStackTrace(); // TODO do smth
-				}
+				write();
 				resultPanel.repaint();
 			}
 		});
@@ -266,6 +258,16 @@ public class VocabularyFrame extends JDialog {
 		int input = JOptionPane.showConfirmDialog(this, "Are you sure?", title,
 				JOptionPane.YES_NO_OPTION);
 		return input == JOptionPane.YES_OPTION;
+	}
+
+	private void write() {
+		new Thread(() -> {
+			try {
+				MiladTools.writeData();
+			} catch (IOException e) {
+				System.err.println("Error appeared while writing data. (VocabularyFrame)\n".concat(e.getMessage()));
+			}
+		}).start();
 	}
 
 	private void selectAll(boolean flag) {

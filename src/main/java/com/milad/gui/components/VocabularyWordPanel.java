@@ -46,7 +46,8 @@ public class VocabularyWordPanel extends JPanel {
 			hat = (ImageIcon) ResourceLoader.getProperty("hat");
 			bin = (ImageIcon) ResourceLoader.getProperty("bin");
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO handle
+			System.err.println("Error occurred while reading image. (VocabularyWordPanel/(hat.png/bin.png))\n"
+					.concat(e.getMessage()));
 		}
 
 		selection = new JCheckBox();
@@ -67,11 +68,7 @@ public class VocabularyWordPanel extends JPanel {
 			word.setStrength(0);
 			strength.setValue(0);
 			toLearning.setEnabled(false);
-			try {
-				MiladTools.writeData();
-			} catch (IOException e) {
-				e.printStackTrace(); // TODO ???
-			}
+			write();
 		});
 
 		remove = new JButton(bin);
@@ -82,11 +79,7 @@ public class VocabularyWordPanel extends JPanel {
 			int input = JOptionPane.showConfirmDialog(null, "Are you sure?", "Remove", JOptionPane.YES_NO_OPTION);
 			if (input == JOptionPane.YES_OPTION) {
 				MiladTools.remove(word);
-				try {
-					MiladTools.writeData();
-				} catch (IOException e) {
-					e.printStackTrace(); // TODO ???
-				}
+				write();
 				JPanel parent = (JPanel) getParent();
 				parent.remove(this);
 				parent.revalidate();
@@ -172,5 +165,15 @@ public class VocabularyWordPanel extends JPanel {
 		MouseListener ml = getMouseListeners()[0];
 		wordLabel.addMouseListener(ml);
 		translations.addMouseListener(ml);
+	}
+
+	private void write() {
+		new Thread(() -> {
+			try {
+				MiladTools.writeData();
+			} catch (IOException e) {
+				System.err.println("Error appeared while writing data. (VocabularyFrame)\n".concat(e.getMessage()));
+			}
+		}).start();
 	}
 }
