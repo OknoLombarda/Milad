@@ -12,9 +12,9 @@ public class Milad {
 			MiladTools.readData();
 		} catch (IOException e) {
 			System.err.println("Error occurred while reading data. (vocabulary.dat)\n".concat(e.getMessage()));
+			System.exit(1);
 		} catch (ClassNotFoundException e) {
 			System.err.println("Files are missing.\n".concat(e.getMessage()));
-		} finally {
 			System.exit(1);
 		}
 
