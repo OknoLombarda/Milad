@@ -4,7 +4,7 @@
 	<groupId>com.milad</groupId>
 	<artifactId>Milad</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>Milad</name>
 	<url>https://github.com/OknoLombarda/Milad</url>
 
