@@ -210,6 +210,7 @@ public class WordEditor extends JDialog {
 				MiladTools.writeData();
 			} catch (IOException e) {
 				System.err.println("Error appeared while writing data. (WordEditor)\n".concat(e.getMessage()));
+				System.exit(1);
 			}
 		}).start();
 	}

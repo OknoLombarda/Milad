@@ -129,6 +129,7 @@ public class PhraseEditor extends JDialog {
 				MiladTools.writeData();
 			} catch (IOException e) {
 				System.err.println("Error appeared while writing data. (PhraseEditor)\n".concat(e.getMessage()));
+				System.exit(1);
 			}
 		}).start();
 	}

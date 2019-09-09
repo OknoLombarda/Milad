@@ -45,7 +45,9 @@ public class MiladMainFrame extends JFrame {
 		try {
 			setIconImage(((ImageIcon) ResourceLoader.getProperty("icon")).getImage());
 		} catch (IOException e) {
-			System.err.println("Error occurred while reading image. (MiladMainFrame/icon.png)\n".concat(e.getMessage()));
+			System.err.println("Error occurred while reading image. (MiladMainFrame/icon.png)\n"
+					.concat(e.getMessage()));
+			System.exit(1);
 		}
 
 		GridBagLayout layout = new GridBagLayout();
@@ -77,6 +79,7 @@ public class MiladMainFrame extends JFrame {
 		} catch (IOException e) {
 			System.err.println("Error occurred while reading resources. (MiladMainFrame/(about.txt/ava.png))\n"
 					.concat(e.getMessage()));
+			System.exit(1);
 		}
 
 		aboutPanel.add(aboutLabel, BorderLayout.WEST);
