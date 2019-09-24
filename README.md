@@ -1,3 +1,3 @@
 # Milad
 This is a program that allows practicing foreign words (basically English).
-For now it doesn't really have any functionality, just a horribly looking GUI, but that's ok, I'm working on it
+I actually made it usable, but I'm done with it. When I had started making it I thought it'd be interesting but, as it turned out, making GUI for an app is borring as hell. Anyway, the program might not be the best looking thing you'll ever see, but you can actually use it. All training are finished, all necessary functionalities are implemented. There are some keyboard shortcuts that are pretty obvious so I'm not going to describe them here. Just try to guess and if you are not a total normie (I bet you aren't if you're reading this on github) then you'll succeed
