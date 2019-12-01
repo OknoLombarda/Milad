@@ -62,7 +62,7 @@ public class WordEditor extends JDialog {
 		super(parent, EDIT_TITLE, true);
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLayout(new GridBagLayout());
 		
 		wordLabel = new JLabel("Word");

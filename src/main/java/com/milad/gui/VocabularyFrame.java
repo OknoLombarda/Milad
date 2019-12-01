@@ -20,6 +20,8 @@ import com.milad.gui.components.AutoscrollSafePanel;
 import com.milad.gui.components.VocabularyWordPanel;
 
 public class VocabularyFrame extends JDialog {
+	private static final long serialVersionUID = 1L;
+	
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String BUTTON_PANEL = "buttons";
@@ -181,10 +183,12 @@ public class VocabularyFrame extends JDialog {
 			panel.addListeners();
 			JCheckBox cb = panel.getCheckBox();
 			cb.addActionListener(event -> {
-				if (cb.isSelected() && !currentCard.equals(SELECTION_PANEL)) {
-					switchCards(SELECTION_PANEL);
+				if (cb.isSelected()) {
 					selected++;
-				} else if (!cb.isSelected()) {
+					if (currentCard.equals(BUTTON_PANEL)) {
+						switchCards(SELECTION_PANEL);
+					}
+				} else {
 					selected--;
 					if (selected == 0) {
 						switchCards(BUTTON_PANEL);
@@ -289,6 +293,8 @@ public class VocabularyFrame extends JDialog {
 	}
 
 	private class Selector extends AbstractAction {
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			selectAll(true);

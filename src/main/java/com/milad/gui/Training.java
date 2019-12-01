@@ -26,7 +26,7 @@ public class Training extends JDialog {
 			public void windowClosing(WindowEvent event) {
 				int input = JOptionPane.showConfirmDialog(d, "Are you sure?", "Training", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION)
-					setVisible(false);
+					dispose();
 			}
 		});
 	}

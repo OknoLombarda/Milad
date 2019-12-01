@@ -29,7 +29,7 @@ public class TrainingChooser extends JDialog {
 	
 	public TrainingChooser(JFrame parent) {
 		super(parent, "Trainings", true);
-		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 		setLocationRelativeTo(null);
